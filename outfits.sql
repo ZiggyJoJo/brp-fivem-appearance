@@ -1,6 +1,6 @@
 CREATE TABLE `outfits` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `identifier` int NOT NULL,
+  `identifier` varchar(60) NOT NULL,
   `name` longtext,
   `ped` longtext,
   `components` longtext,
