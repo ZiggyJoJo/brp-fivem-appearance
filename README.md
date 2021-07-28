@@ -6,6 +6,14 @@ This is something I made for my server a couple months ago I take no credit for 
 
 - ESX
 - NeroHiro’s Context Menu https://forum.cfx.re/t/release-standalone-nerohiro-s-context-menu-dynamic-event-firing-menu/2564083
+    Requires you to replace this callback with the one below in client.lua
+```
+    RegisterNUICallback("dataPost", function(data, cb)
+        SetNuiFocus(false)
+        TriggerEvent(data.event, data.arg1, data.arg2, data.arg3)
+        cb('ok')
+    end)
+ ```
 - NeroHiro’s Keyboard (Can be easily replaced) https://forum.cfx.re/t/release-standalone-nerohiro-s-keyboard-dynamic-nui-keyboard-input/2506326
 - CD Draw text UI (Can be easily replaced) https://forum.cfx.re/t/free-release-draw-text-ui/1885313
 
