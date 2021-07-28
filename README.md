@@ -17,7 +17,7 @@ This rescorce is meant to replace these two so it cannot be used while these res
 
 ## Setup
 
-You must trigger this export after the player loads in order to set their skin 
+You must trigger this export client side after the player loads in order to set their skin 
 
 ```cfg
 ESX.TriggerServerCallback('fivem-appearance:getPlayerSkin', function(appearance)
