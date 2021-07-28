@@ -1,6 +1,6 @@
 # brp-fivem-appearance
 
-I take no credit for the UI all I've done is make the LUA side with clothing shops, barber shops and saved outfits the original post was from https://github.com/pedr0fontoura/fivem-appearance
+This is something I made for my server a couple months ago I take no credit for the UI all I've done is make the LUA side with clothing shops, barber shops and saved outfits the original post was from https://github.com/pedr0fontoura/fivem-appearance
 
 ## Dependencies
 
