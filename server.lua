@@ -1,6 +1,4 @@
-ESX = nil
-
-TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
+if not ESX then TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end) end
 
 RegisterServerEvent('fivem-appearance:save')
 AddEventHandler('fivem-appearance:save', function(appearance)
@@ -13,6 +11,20 @@ AddEventHandler('fivem-appearance:save', function(appearance)
 end)
 
 ESX.RegisterServerCallback('fivem-appearance:getPlayerSkin', function(source, cb)
+	local xPlayer = ESX.GetPlayerFromId(source)
+
+	MySQL.Async.fetchAll('SELECT skin FROM users WHERE identifier = @identifier', {
+		['@identifier'] = xPlayer.identifier
+	}, function(users)
+		local user, appearance = users[1]
+		if user.skin then
+			appearance = json.decode(user.skin)
+		end
+		cb(appearance)
+	end)
+end)
+
+ESX.RegisterServerCallback('esx_skin:getPlayerSkin', function(source, cb)
 	local xPlayer = ESX.GetPlayerFromId(source)
 
 	MySQL.Async.fetchAll('SELECT skin FROM users WHERE identifier = @identifier', {

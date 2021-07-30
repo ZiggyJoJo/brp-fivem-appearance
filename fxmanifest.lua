@@ -20,4 +20,9 @@ files {
   'peds.json'
 }
 
+provides {
+  'skinchanger',
+  'esx_skin'
+}
+
 ui_page 'ui/build/index.html'
