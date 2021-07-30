@@ -25,6 +25,9 @@ This rescorce is meant to replace these two so it cannot be used while these res
 
 ## Setup
 
+- Delete vrp- from the file name
+- Run Outfits.sql
+
 If you'r using esx_multicharacter or most rescorces using esx_skin or skinchanger this should work out of the box thansk to edits made by Linden however if it doeas not you can use the trigger below on the client side after the player loads in order to set their skin 
 
 ```cfg
