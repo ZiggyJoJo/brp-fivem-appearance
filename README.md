@@ -19,13 +19,13 @@ This is something I made for my server a couple months ago I take no credit for 
 
 ## Conflicts
 
+This rescorce is meant to replace these two so it cannot be used while these rescorces are running 
 - esx_skin
 - skinchanger
-This rescorce is meant to replace these two so it cannot be used while these rescorces are running 
 
 ## Setup
 
-You must trigger this export client side after the player loads in order to set their skin 
+If you'r using esx_multicharacter or most rescorces using esx_skin or skinchanger this should work out of the box thansk to edits made by Linden however if it doeas not you can use the trigger below on the client side after the player loads in order to set their skin 
 
 ```cfg
 ESX.TriggerServerCallback('fivem-appearance:getPlayerSkin', function(appearance)
