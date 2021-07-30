@@ -373,9 +373,9 @@ RegisterNetEvent('esx_skin:openSaveableMenu')
 AddEventHandler('esx_skin:openSaveableMenu', function(submitCb, cancelCb)
 	local config = {
 		ped = true,
-		headBlend = false,
-		faceFeatures = false,
-		headOverlays = false,
+		headBlend = true,
+		faceFeatures = true,
+		headOverlays = true,
 		components = true,
 		props = true
 	}
