@@ -389,21 +389,3 @@ AddEventHandler('esx_skin:openSaveableMenu', function(submitCb, cancelCb)
 		end
 	end, config)
 end)
-
-RegisterNetEvent('esx_skin:playerRegistered')
-AddEventHandler('esx_skin:playerRegistered', function()
-	local config = {
-		ped = true,
-		headBlend = true,
-		faceFeatures = true,
-		headOverlays = true,
-		components = true,
-		props = true
-	}
-	
-	exports['fivem-appearance']:startPlayerCustomization(function (appearance)
-		if appearance then
-			TriggerServerEvent('fivem-appearance:save', appearance)
-		end
-	end, config)	
-end)
