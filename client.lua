@@ -188,7 +188,7 @@ RegisterNetEvent('fivem-appearance:clothingShop', function()
             txt = "",
             params = {
                 event = "fivem-appearance:pickNewOutfit",
-                arg1 = {
+                args = {
                     number = 1,
                     id = 2
                 }
@@ -208,7 +208,7 @@ RegisterNetEvent('fivem-appearance:clothingShop', function()
             txt = "",
             params = {
                 event = "fivem-appearance:deleteOutfitMenu",
-                arg1 = {
+                args = {
                     number = 1,
                     id = 2
                 }
@@ -260,9 +260,11 @@ RegisterNetEvent('fivem-appearance:pickNewOutfit', function(data)
 				txt = "",
 				params = {
 					event = 'fivem-appearance:setOutfit',
-					arg1 = allMyOutfits[i].pedModel, 
-					arg2 = allMyOutfits[i].pedComponents, 
-					arg3 = allMyOutfits[i].pedProps
+					args = {
+						ped = allMyOutfits[i].pedModel, 
+						components = allMyOutfits[i].pedComponents, 
+						props = allMyOutfits[i].pedProps
+					}
 				}
 			},
 		})
@@ -284,7 +286,10 @@ AddEventHandler('fivem-appearance:sendOutfits', function(myOutfits)
 end)
 
 RegisterNetEvent('fivem-appearance:setOutfit')
-AddEventHandler('fivem-appearance:setOutfit', function(pedModel, pedComponents, pedProps)
+AddEventHandler('fivem-appearance:setOutfit', function(data)
+	local pedModel = data.ped
+	local pedComponents = data.components
+	local pedProps = data.props
 	local playerPed = PlayerPedId()
 	local currentPedModel = exports['fivem-appearance']:getPedModel(playerPed)
 	if currentPedModel ~= pedModel then
@@ -346,7 +351,7 @@ RegisterNetEvent('fivem-appearance:deleteOutfitMenu', function(data)
 				txt = "",
 				params = {
 					event = 'fivem-appearance:deleteOutfit',
-					arg1 = allMyOutfits[i].id
+					args = allMyOutfits[i].id
 				}
 			},
 		})
@@ -358,6 +363,15 @@ AddEventHandler('fivem-appearance:deleteOutfit', function(id)
 	TriggerServerEvent('fivem-appearance:deleteOutfit', id)
 end)
 
+RegisterCommand('propfix', function()
+    for k, v in pairs(GetGamePool('CObject')) do
+        if IsEntityAttachedToEntity(PlayerPedId(), v) then
+            SetEntityAsMissionEntity(v, true, true)
+            DeleteObject(v)
+            DeleteEntity(v)
+        end
+    end
+end)
 
 -- Add compatibility with skinchanger and esx_skin TriggerEvents
 RegisterNetEvent('skinchanger:loadSkin')
