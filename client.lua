@@ -394,12 +394,12 @@ AddEventHandler('esx_skin:openSaveableMenu', function(submitCb, cancelCb)
 		props = true
 	}
 	
-	exports['fivem-appearance']:startPlayerCustomization(function (appearance)
-		if (appearance) then
-			TriggerServerEvent('fivem-appearance:save', appearance)
-			if submitCb() ~= nil then submitCb() end
-		elseif cancelCb ~= nil then
-			cancelCb()
-		end
-	end, config)
+exports['fivem-appearance']:startPlayerCustomization(function (appearance)
+        if (appearance) then
+            TriggerServerEvent('fivem-appearance:save', appearance)
+            print('Saved')
+        else
+            print('Canceled')
+        end
+    end, config)
 end)
