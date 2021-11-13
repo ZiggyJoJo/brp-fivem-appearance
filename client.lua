@@ -324,7 +324,7 @@ RegisterNetEvent('fivem-appearance:saveOutfit', function()
         local pedComponents = exports['fivem-appearance']:getPedComponents(playerPed)
         local pedProps = exports['fivem-appearance']:getPedProps(playerPed)
         Citizen.Wait(500)
-        TriggerServerEvent('fivem-appearance:saveOutfit', keyboard, pedModel, pedComponents, pedProps)
+        TriggerServerEvent('fivem-appearance:saveOutfit', keyboard[1].input, pedModel, pedComponents, pedProps)
         
     end
 end)
