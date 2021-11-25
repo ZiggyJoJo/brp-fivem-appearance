@@ -5,6 +5,7 @@ Config.MarkerSize   = {x = 7.0, y = 7.0, z = 1.0}
 Config.MarkerColor  = {r = 102, g = 102, b = 204}
 Config.MarkerType   = 25
 Config.UseLegacy = false -- Enable ESX Legacy (v 1.3)
+Config.UseNewNHKeyboard = true -- Use the newest nh-keyboard? https://github.com/nerohiro/nh-keyboard
 
 Config.ClothingShops = {
 	[1] = {
