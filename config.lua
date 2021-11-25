@@ -4,7 +4,7 @@ Config.DrawDistance = 10.0
 Config.MarkerSize   = {x = 7.0, y = 7.0, z = 1.0}
 Config.MarkerColor  = {r = 102, g = 102, b = 204}
 Config.MarkerType   = 25
-Config.EnableLegacy = false -- Enable ESX Legacy (v 1.3)
+Config.UseLegacy = false -- Enable ESX Legacy (v 1.3)
 
 Config.ClothingShops = {
 	[1] = {
