@@ -323,23 +323,40 @@ AddEventHandler('fivem-appearance:setOutfit', function(data)
 end)
 
 RegisterNetEvent('fivem-appearance:saveOutfit', function()
-    local keyboard = exports["nh-keyboard"]:KeyboardInput({
-        header = "Name Outfit", 
-        rows = {
-            {
-                id = 0, 
-                txt = ""
+    if Config.UseNewNHKeyboard then
+        local keyboard, name = exports["nh-keyboard"]:Keyboard({
+            header = "Name Outfit", 
+            rows = {"Outfit name here"}
+        })
+        if keyboard then
+            if name then
+                local playerPed = PlayerPedId()
+                local pedModel = exports['fivem-appearance']:getPedModel(playerPed)
+                local pedComponents = exports['fivem-appearance']:getPedComponents(playerPed)
+                local pedProps = exports['fivem-appearance']:getPedProps(playerPed)
+                Citizen.Wait(500)
+                TriggerServerEvent('fivem-appearance:saveOutfit', name, pedModel, pedComponents, pedProps)
+            end
+        end
+    else
+        local keyboard = exports["nh-keyboard"]:KeyboardInput({
+            header = "Name Outfit", 
+            rows = {
+                {
+                    id = 0, 
+                    txt = ""
+                }
             }
-        }
-    })
-    if keyboard ~= nil then
-        local playerPed = PlayerPedId()
-        local pedModel = exports['fivem-appearance']:getPedModel(playerPed)
-        local pedComponents = exports['fivem-appearance']:getPedComponents(playerPed)
-        local pedProps = exports['fivem-appearance']:getPedProps(playerPed)
-        Citizen.Wait(500)
-        TriggerServerEvent('fivem-appearance:saveOutfit', keyboard, pedModel, pedComponents, pedProps)
-        
+        })
+        if keyboard ~= nil then
+            local playerPed = PlayerPedId()
+            local pedModel = exports['fivem-appearance']:getPedModel(playerPed)
+            local pedComponents = exports['fivem-appearance']:getPedComponents(playerPed)
+            local pedProps = exports['fivem-appearance']:getPedProps(playerPed)
+            Citizen.Wait(500)
+            TriggerServerEvent('fivem-appearance:saveOutfit', keyboard[1].input, pedModel, pedComponents, pedProps)
+            
+        end
     end
 end)
 
