@@ -150,7 +150,7 @@ Citizen.CreateThread(function()
 				if CurrentAction == 'barberMenu' then
 
 					local config = {
-						ped = true,
+						ped = false,
 						headBlend = true,
 						faceFeatures = true,
 						headOverlays = true,
@@ -161,9 +161,13 @@ Citizen.CreateThread(function()
 					exports['fivem-appearance']:startPlayerCustomization(function (appearance)
 						if (appearance) then
 							TriggerServerEvent('fivem-appearance:save', appearance)
-							print('Saved')
+							if Config.UseLegacy then
+								ESX.SetPlayerData('ped', PlayerPedId()) -- Fix for esx legacy
+							end
 						else
-							print('Canceled')
+							if Config.UseLegacy then
+								ESX.SetPlayerData('ped', PlayerPedId()) -- Fix for esx legacy
+							end
 						end
 					end, config)
 				end
@@ -219,7 +223,7 @@ end)
 
 RegisterNetEvent('fivem-appearance:clothingMenu', function()
 	local config = {
-		ped = true,
+		ped = false,
 		headBlend = false,
 		faceFeatures = false,
 		headOverlays = false,
@@ -230,9 +234,13 @@ RegisterNetEvent('fivem-appearance:clothingMenu', function()
 	exports['fivem-appearance']:startPlayerCustomization(function (appearance)
 		if (appearance) then
 			TriggerServerEvent('fivem-appearance:save', appearance)
-			print('Saved')
+			if Config.UseLegacy then
+				ESX.SetPlayerData('ped', PlayerPedId()) -- Fix for esx legacy
+			end
 		else
-			print('Canceled')
+			if Config.UseLegacy then
+				ESX.SetPlayerData('ped', PlayerPedId()) -- Fix for esx legacy
+			end
 		end
 	end, config)
 end)
@@ -300,32 +308,55 @@ AddEventHandler('fivem-appearance:setOutfit', function(data)
 		exports['fivem-appearance']:setPedProps(playerPed, pedProps)
 		local appearance = exports['fivem-appearance']:getPedAppearance(playerPed)
 		TriggerServerEvent('fivem-appearance:save', appearance)
+		if Config.UseLegacy then
+			ESX.SetPlayerData('ped', PlayerPedId()) -- Fix for esx legacy
+		end
 	else
 		exports['fivem-appearance']:setPedComponents(playerPed, pedComponents)
 		exports['fivem-appearance']:setPedProps(playerPed, pedProps)
 		local appearance = exports['fivem-appearance']:getPedAppearance(playerPed)
 		TriggerServerEvent('fivem-appearance:save', appearance)
+		if Config.UseLegacy then
+			ESX.SetPlayerData('ped', PlayerPedId()) -- Fix for esx legacy
+		end
 	end
 end)
 
 RegisterNetEvent('fivem-appearance:saveOutfit', function()
-    local keyboard = exports["nh-keyboard"]:KeyboardInput({
-        header = "Name Outfit", 
-        rows = {
-            {
-                id = 0, 
-                txt = ""
+    if Config.UseNewNHKeyboard then
+        local keyboard, name = exports["nh-keyboard"]:Keyboard({
+            header = "Name Outfit", 
+            rows = {"Outfit name here"}
+        })
+        if keyboard then
+            if name then
+                local playerPed = PlayerPedId()
+                local pedModel = exports['fivem-appearance']:getPedModel(playerPed)
+                local pedComponents = exports['fivem-appearance']:getPedComponents(playerPed)
+                local pedProps = exports['fivem-appearance']:getPedProps(playerPed)
+                Citizen.Wait(500)
+                TriggerServerEvent('fivem-appearance:saveOutfit', name, pedModel, pedComponents, pedProps)
+            end
+        end
+    else
+        local keyboard = exports["nh-keyboard"]:KeyboardInput({
+            header = "Name Outfit", 
+            rows = {
+                {
+                    id = 0, 
+                    txt = ""
+                }
             }
-        }
-    })
-    if keyboard ~= nil then
-        local playerPed = PlayerPedId()
-        local pedModel = exports['fivem-appearance']:getPedModel(playerPed)
-        local pedComponents = exports['fivem-appearance']:getPedComponents(playerPed)
-        local pedProps = exports['fivem-appearance']:getPedProps(playerPed)
-        Citizen.Wait(500)
-        TriggerServerEvent('fivem-appearance:saveOutfit', keyboard, pedModel, pedComponents, pedProps)
-        
+        })
+        if keyboard ~= nil then
+            local playerPed = PlayerPedId()
+            local pedModel = exports['fivem-appearance']:getPedModel(playerPed)
+            local pedComponents = exports['fivem-appearance']:getPedComponents(playerPed)
+            local pedProps = exports['fivem-appearance']:getPedProps(playerPed)
+            Citizen.Wait(500)
+            TriggerServerEvent('fivem-appearance:saveOutfit', keyboard[1].input, pedModel, pedComponents, pedProps)
+            
+        end
     end
 end)
 
@@ -397,11 +428,15 @@ AddEventHandler('esx_skin:openSaveableMenu', function(submitCb, cancelCb)
 	exports['fivem-appearance']:startPlayerCustomization(function (appearance)
 		if (appearance) then
 			TriggerServerEvent('fivem-appearance:save', appearance)
-			print('Saved')
+			if Config.UseLegacy then
+			   ESX.SetPlayerData('ped', PlayerPedId()) -- Fix for esx legacy
+			end
 			if submitCb then submitCb() end
 		else
-			print('Canceled')
 			if cancelCb then cancelCb() end
+			if Config.UseLegacy then
+			   ESX.SetPlayerData('ped', PlayerPedId()) -- Fix for esx legacy
+			end
 		end
 	end, config)
 end)
