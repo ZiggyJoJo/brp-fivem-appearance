@@ -1,5 +1,5 @@
 fx_version "cerulean"
-game { "gta5" }
+game "gta5"
 
 server_scripts {
   '@mysql-async/lib/MySQL.lua',
@@ -9,8 +9,8 @@ server_scripts {
 client_scripts {
   '@es_extended/locale.lua',
   'typescript/build/client.js',
-  'client.lua',
   'config.lua',
+  'client.lua'
 }
 
 files {
