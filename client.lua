@@ -339,7 +339,7 @@ RegisterNetEvent('fivem-appearance:saveOutfit', function()
             end
         end
     else
-        local keyboard = exports["nh-keyboard"]:KeyboardInput({
+        local keyboard = exports["nh-keyboard"]:Keyboard({
             header = "Name Outfit", 
             rows = {
                 {
