@@ -4,7 +4,7 @@ RegisterServerEvent('fivem-appearance:save')
 AddEventHandler('fivem-appearance:save', function(appearance)
 	local xPlayer = ESX.GetPlayerFromId(source)
 
-	MySQL.Async.execute('UPDATE users SET skin = @skin WHERE identifier = @identifier', {
+	MySQL.update('UPDATE users SET skin = @skin WHERE identifier = @identifier', {
 		['@skin'] = json.encode(appearance),
 		['@identifier'] = xPlayer.identifier
 	})
@@ -13,7 +13,7 @@ end)
 ESX.RegisterServerCallback('fivem-appearance:getPlayerSkin', function(source, cb)
 	local xPlayer = ESX.GetPlayerFromId(source)
 
-	MySQL.Async.fetchAll('SELECT skin FROM users WHERE identifier = @identifier', {
+	MySQL.scalar.await('SELECT skin FROM users WHERE identifier = @identifier', {
 		['@identifier'] = xPlayer.identifier
 	}, function(users)
 		local user, appearance = users[1]
@@ -24,10 +24,20 @@ ESX.RegisterServerCallback('fivem-appearance:getPlayerSkin', function(source, cb
 	end)
 end)
 
+RegisterNetEvent('esx_skin:save', function(appearance, tattoos)
+	local xPlayer = ESX.GetPlayerFromId(source)
+    local identifier = xPlayer.identifier
+    MySQL.update('UPDATE users SET skin = ? WHERE identifier = ?', { json.encode(appearance), identifier })
+	if tattoos ~= nil then 
+		MySQL.update('UPDATE users SET tattoos = ? WHERE identifier = ?', { json.encode(tattoos), identifier })
+	end
+end)
+
+
 ESX.RegisterServerCallback('esx_skin:getPlayerSkin', function(source, cb)
 	local xPlayer = ESX.GetPlayerFromId(source)
 
-	MySQL.Async.fetchAll('SELECT skin FROM users WHERE identifier = @identifier', {
+	MySQL.query('SELECT skin FROM users WHERE identifier = @identifier', {
 		['@identifier'] = xPlayer.identifier
 	}, function(users)
 		local user, appearance = users[1]
@@ -42,7 +52,7 @@ RegisterServerEvent("fivem-appearance:saveOutfit")
 AddEventHandler("fivem-appearance:saveOutfit", function(name, pedModel, pedComponents, pedProps)
 	local xPlayer = ESX.GetPlayerFromId(source)
 
-	MySQL.Async.insert('INSERT INTO `outfits` (`identifier`, `name`, `ped`, `components`, `props`) VALUES (@identifier, @name, @ped, @components, @props)', {
+	MySQL.insert('INSERT INTO `outfits` (`identifier`, `name`, `ped`, `components`, `props`) VALUES (@identifier, @name, @ped, @components, @props)', {
 		['@ped'] = json.encode(pedModel),
 		['@components'] = json.encode(pedComponents),
 		['@props'] = json.encode(pedProps),
@@ -56,7 +66,7 @@ AddEventHandler("fivem-appearance:getOutfit", function(name)
 	local xPlayer = ESX.GetPlayerFromId(source)
 	local oSource = source
 
-	MySQL.Async.fetchScalar('SELECT outfit FROM outfits WHERE identifier = @identifier AND name = @name', {
+	MySQL.scalar('SELECT outfit FROM outfits WHERE identifier = @identifier AND name = @name', {
 		['@identifier'] = xPlayer.identifier,
 		['@name'] = name
 	}, function(outfit)
@@ -74,7 +84,7 @@ AddEventHandler("fivem-appearance:getOutfits", function()
 	local oSource = source
 	local myOutfits = {}
 
-	MySQL.Async.fetchAll('SELECT id, name, ped, components, props FROM outfits WHERE identifier = @identifier', {
+	MySQL.query('SELECT id, name, ped, components, props FROM outfits WHERE identifier = @identifier', {
 		['@identifier'] = xPlayer.identifier
 	}, function(result)
 		for i=1, #result, 1 do
@@ -88,7 +98,7 @@ RegisterServerEvent("fivem-appearance:deleteOutfit")
 AddEventHandler("fivem-appearance:deleteOutfit", function(id)
 	local xPlayer = ESX.GetPlayerFromId(source)
 
-	MySQL.Async.execute('DELETE FROM `outfits` WHERE `id` = @id', {
+	MySQL.update('DELETE FROM `outfits` WHERE `id` = @id', {
 		['@id'] = id
 	})
 end)
