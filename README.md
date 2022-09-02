@@ -5,6 +5,8 @@ This is something I made for my server a couple months ago I take no credit for 
 ## Dependencies
 
 - ESX
+- FiveM Appearance https://github.com/pedr0fontoura/fivem-appearance
+- BT-Polyzone https://github.com/ZiggyJoJo/brp-fivem-appearance/releases/tag/1.2
 - NeroHiro’s Context Menu https://github.com/LukeWasTakenn/nh-context
 - NeroHiro’s Keyboard (Can be easily replaced) https://forum.cfx.re/t/release-standalone-nerohiro-s-keyboard-dynamic-nui-keyboard-input/2506326
 - CD Draw text UI (Can be easily replaced) https://forum.cfx.re/t/free-release-draw-text-ui/1885313
