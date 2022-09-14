@@ -90,13 +90,13 @@ AddEventHandler('bt-polyzone:exit', function(name)
         if v.name == name then
 			if v.type == "Clothing Shop" then
 				inClothingShop = false
-				TriggerEvent('cd_drawtextui:HideUI')
+				lib.hideTextUI()
 			elseif v.type == "Barber Shop" then
 				inBarberShop = false
-				TriggerEvent('cd_drawtextui:HideUI')
+				lib.hideTextUI()
 			elseif v.type == "Tattoo Shop" then
 				inTattooShop = false
-				TriggerEvent('cd_drawtextui:HideUI')
+				lib.hideTextUI()
 			end
             break
         end
@@ -106,11 +106,11 @@ end)
 RegisterNetEvent('fivem-appearance:inShop')
 AddEventHandler('fivem-appearance:inShop', function()
 	if inClothingShop then
-		TriggerEvent('cd_drawtextui:ShowUI', 'show', "[E] Change Clothing")
+		lib.showTextUI("[E] Change Clothing", {icon = "fa-solid fa-shirt"})
 	elseif inBarberShop then
-		TriggerEvent('cd_drawtextui:ShowUI', 'show', "[E] Change Hair/Face")
+		lib.showTextUI("[E] Change Hair/Face", {icon = "fa-solid fa-scissors"})
 	elseif inTattooShop then
-		TriggerEvent('cd_drawtextui:ShowUI', 'show', "[E] Change Tattoos")
+		lib.showTextUI("[E] Change Tattoos", {icon = "fa-solid fa-child"})
 	end
 	while inClothingShop or inBarberShop or inTattooShop do
 		Citizen.Wait(0)
@@ -123,7 +123,7 @@ AddEventHandler('fivem-appearance:inShop', function()
 				TriggerEvent("fivem-appearance:tattooMenu")
 			end
 			if inBarberShop then
-				TriggerEvent('cd_drawtextui:HideUI')
+				lib.hideTextUI()
 				local config = {
 					ped = true,
 					headBlend = true,
@@ -141,7 +141,7 @@ AddEventHandler('fivem-appearance:inShop', function()
 					else
 						print('Canceled')
 					end
-					TriggerEvent('cd_drawtextui:ShowUI', 'show', "[E] Change Hair/Face")
+					lib.showTextUI("[E] Change Hair/Face", {icon = "fa-solid fa-scissors"})
 				end, config)
 			end
 		end
@@ -149,48 +149,31 @@ AddEventHandler('fivem-appearance:inShop', function()
 end)
 
 RegisterNetEvent('fivem-appearance:clothingShop', function()
-    TriggerEvent('nh-context:sendMenu', {
-        {
-            id = 1,
-            header = "Change clothing",
-            txt = "",
-			params = {
+	lib.registerContext({
+		id = 'fivem-appearance:clothingShop',
+		title =  "Clothing Shop",
+		options = {
+			{           
+				title = "Change clothing",
 				event = "fivem-appearance:clothingMenu"
-			}
-        },
-        {
-            id = 2,
-            header = "Change Outfit",
-            txt = "",
-            params = {
-                event = "fivem-appearance:pickNewOutfit",
-                args = {
-                    number = 1,
-                    id = 2
-                }
-            }
-        },
-		{
-            id = 3,
-            header = "Save New Outfit",
-            txt = "",
-			params = {
+			},
+			{
+				title = "Change Outfit",
+				event = "fivem-appearance:pickNewOutfit",
+				arrow = true
+			},
+			{
+				title = "Save New Outfit",
 				event = "fivem-appearance:saveOutfit"
+			},
+			{
+				title = "Delete Outfit",
+				event = "fivem-appearance:deleteOutfitMenu",
+				arrow = true
 			}
-        },
-		{
-			id = 4,
-            header = "Delete Outfit",
-            txt = "",
-            params = {
-                event = "fivem-appearance:deleteOutfitMenu",
-                args = {
-                    number = 1,
-                    id = 2
-                }
-            }
-        }
-    })
+		}
+	})
+	lib.showContext('fivem-appearance:clothingShop')
 end)
 
 RegisterNetEvent('fivem-appearance:clothingMenu', function()
@@ -239,37 +222,30 @@ RegisterNetEvent('fivem-appearance:tattooMenu', function()
 end)
 
 RegisterNetEvent('fivem-appearance:pickNewOutfit', function(data)
-    local id = data.id
-    local number = data.number
-	TriggerEvent('fivem-appearance:getOutfits')
-    TriggerEvent('nh-context:sendMenu', {
-        {
-            id = 1,
-            header = "< Go Back",
-            txt = "",
-            params = {
-                event = "fivem-appearance:clothingShop"
-            }
-        },
-    })
-	Citizen.Wait(300)
-	for i=1, #allMyOutfits, 1 do
-		TriggerEvent('nh-context:sendMenu', {
-			{
-				id = (1 + i),
-				header = allMyOutfits[i].name,
-				txt = "",
-				params = {
-					event = 'fivem-appearance:setOutfit',
-					args = {
-						ped = allMyOutfits[i].pedModel, 
-						components = allMyOutfits[i].pedComponents, 
-						props = allMyOutfits[i].pedProps
-					}
-				}
-			},
+	TriggerServerEvent('fivem-appearance:getOutfits')
+	Citizen.Wait(100)
+	local options = {}
+
+	for k, v in pairs(allMyOutfits) do
+		table.insert(options,  {
+			title = v.name,
+			event = 'fivem-appearance:setOutfit',
+			args = {
+				ped = v.pedModel, 
+				components = v.pedComponents, 
+				props = v.pedProps,
+			}
 		})
 	end
+    Citizen.Wait(100)
+    lib.registerContext({
+        id = 'fivem-appearance:pickNewOutfit',
+        title = "Outfits",
+		menu = 'fivem-appearance:clothingShop',
+        options = options
+    })
+	Citizen.Wait(100)
+    lib.showContext('fivem-appearance:pickNewOutfit')
 end)
 
 RegisterNetEvent('fivem-appearance:getOutfits')
@@ -310,53 +286,40 @@ AddEventHandler('fivem-appearance:setOutfit', function(data)
 end)
 
 RegisterNetEvent('fivem-appearance:saveOutfit', function()
-	local keyboard = exports["nh-keyboard"]:KeyboardInput({
-		header = "Name Outfit", 
-		rows = {
-			{
-				id = 0, 
-				txt = ""
-			}
-		}
-	})
-	if keyboard ~= nil then
+	local input = lib.inputDialog('New Outfit', {'Name'})
+	if input ~= nil then
 		local playerPed = PlayerPedId()
 		local pedModel = exports['fivem-appearance']:getPedModel(playerPed)
 		local pedComponents = exports['fivem-appearance']:getPedComponents(playerPed)
 		local pedProps = exports['fivem-appearance']:getPedProps(playerPed)
 		Citizen.Wait(500)
-		TriggerServerEvent('fivem-appearance:saveOutfit', keyboard[1].input, pedModel, pedComponents, pedProps)
+		TriggerServerEvent('fivem-appearance:saveOutfit', input[1], pedModel, pedComponents, pedProps)
 	end
 end)
 
 RegisterNetEvent('fivem-appearance:deleteOutfitMenu', function(data)
-    local id = data.id
-    local number = data.number
 	TriggerEvent('fivem-appearance:getOutfits')
 	Citizen.Wait(150)
-    TriggerEvent('nh-context:sendMenu', {
-        {
-            id = 1,
-            header = "< Go Back",
-            txt = "",
-            params = {
-                event = "fivem-appearance:clothingShop"
-            }
-        },
-    })
+
+	local options = {}
+
 	for i=1, #allMyOutfits, 1 do
-		TriggerEvent('nh-context:sendMenu', {
-			{
-				id = (1 + i),
-				header = allMyOutfits[i].name,
-				txt = "",
-				params = {
-					event = 'fivem-appearance:deleteOutfit',
-					args = allMyOutfits[i].id
-				}
-			},
+		table.insert(options,  {
+			title = allMyOutfits[i].name,
+			description = "",
+			event = 'fivem-appearance:deleteOutfit',
+			args = allMyOutfits[i].id
 		})
 	end
+    Citizen.Wait(100)
+    lib.registerContext({
+        id = 'fivem-appearance:deleteOutfitMenu',
+        title = "Deleate Outfits",
+		menu = 'fivem-appearance:clothingShop',
+        options = options
+    })
+	Citizen.Wait(100)
+    lib.showContext('fivem-appearance:deleteOutfitMenu')
 end)
 
 RegisterNetEvent('fivem-appearance:deleteOutfit')
@@ -367,34 +330,30 @@ end)
 RegisterNetEvent('fivem-appearance:useWardrobe')
 AddEventHandler('fivem-appearance:useWardrobe', function()
 	TriggerEvent('fivem-appearance:getOutfits')
-    TriggerEvent('nh-context:sendMenu', {
-        {
-            id = 1,
-            header = "Outfits",
-            txt = "",
-            params = {
-                -- event = "fivem-appearance:clothingShop"
-            }
-        },
-    })
-	Citizen.Wait(300)
+	Citizen.Wait(100)
+
+	local options = {}
+
 	for i=1, #allMyOutfits, 1 do
-		TriggerEvent('nh-context:sendMenu', {
-			{
-				id = (i + 1),
-				header = allMyOutfits[i].name,
-				txt = "",
-				params = {
-					event = 'fivem-appearance:setOutfit',
-					args = {
-						ped = allMyOutfits[i].pedModel, 
-						components = allMyOutfits[i].pedComponents, 
-						props = allMyOutfits[i].pedProps
-					}
-				}
-			},
+		table.insert(options,  {
+			title = allMyOutfits[i].name,
+			description = "",
+			event = 'fivem-appearance:setOutfit',
+			args = {
+				ped = allMyOutfits[i].pedModel, 
+				components = allMyOutfits[i].pedComponents, 
+				props = allMyOutfits[i].pedProps
+			}
 		})
 	end
+    Citizen.Wait(100)
+    lib.registerContext({
+        id = 'fivem-appearance:setOutfit',
+        title = "Outfits",
+        options = options
+    })
+	Citizen.Wait(100)
+    lib.showContext('fivem-appearance:setOutfit')
 end)
 
 -- Add compatibility with skinchanger and esx_skin TriggerEvents

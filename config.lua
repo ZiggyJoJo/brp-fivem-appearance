@@ -2,6 +2,18 @@ Config = {}
 
 Config.Shops = {
 	{
+		name = 'SanAndreasAveClothingShop', 
+		type = "Clothing Shop",
+		blip = true, 
+		blipColour = 47, 
+		blipSprite = 73, 
+		x = -1194.2, y = -772.0, z = 17.3, 
+		l = 10.8, w = 16.2, 
+		h = 37, 
+		minZ = 16.0, maxZ = 18.38
+	},
+
+	{
 		name = 'ClothingShopOne', 
 		type = "Clothing Shop",
 		blip = true, 
@@ -12,6 +24,7 @@ Config.Shops = {
 		h = 0, 
 		minZ = 28.38, maxZ = 32.38
 	},
+
 	{
 		name = 'ClothingShopTwo', 
 		type = "Clothing Shop",
@@ -225,17 +238,7 @@ Config.Shops = {
 		h = 45,
 		minZ = 30.72, maxZ = 33.52
 	},
-	-- {
-	-- 	name = 'ApartmentWardrobe', 
-	-- 	type = "Clothing Shop",
-	-- 	blip = false, 
-	-- 	x = -267.76, y = -956.6, z = 21.92,
-	-- 	l = 2.4,
-	-- 	w = 2.8,
-	-- 	h = 0,
-	-- 	minZ = 20.92,
-	-- 	maxZ = 23.22
-	-- },
+
 	{
 		name = 'BarberShopOne', 
 		type = "Barber Shop",
