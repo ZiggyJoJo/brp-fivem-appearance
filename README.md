@@ -35,6 +35,13 @@ ensure brp-fivem-appearance
 setr fivem-appearance:locale "en"
 ```
 
+# Support Me
+
+https://www.buymeacoffee.com/ZiggyJoJo
+
+https://ziggys-scripts.tebex.io
+
+
 ## Preview
 
 ![](https://i.imgur.com/Cs1fvNC.jpeg"")
