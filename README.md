@@ -37,9 +37,9 @@ setr fivem-appearance:locale "en"
 
 # Support Me
 
-https://www.buymeacoffee.com/ZiggyJoJo
+- https://www.buymeacoffee.com/ZiggyJoJo
 
-https://ziggys-scripts.tebex.io
+- https://ziggys-scripts.tebex.io
 
 
 ## Preview
